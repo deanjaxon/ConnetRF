@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ConnectRF | Mobile Edge Console</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="app-container">
+        <header id="app-header" class="hidden">
+            <div class="header-content">
+                <h1>ConnectRF | Mobile Edge Console</h1>
+                <div id="msi-pulse-icon" class="pulse-icon pulse-normal" onclick="openDiagnosticOverlay()"></div>
+            </div>
+        </header>
+
+        <main id="app-main">
+            <!-- Screens will be injected here or toggled -->
+            <div id="screen-login" class="screen active">
+                <div class="login-box">
+                    <div class="login-logo-area">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/59/SAP_2011_logo.svg" alt="SAP Logo"
+                            style="height: 45px; margin-bottom: 12px; display: inline-block;">
+                        <h2>MSI <span class="pulse-text">Pulse</span></h2>
+                        <p class="subtitle">SAP EWM Edge Demo</p>
+                    </div>
+                    <form id="login-form">
+                        <div class="input-group">
+                            <label>Username</label>
+                            <input type="text" id="login-user" required autocomplete="off" value="Tigerclaw">
+                        </div>
+                        <div class="input-group">
+                            <label>Password</label>
+                            <input type="password" id="login-pass" required autocomplete="off" value="TGW773">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Log On</button>
+                        <div id="login-error" class="error-msg hidden">Invalid credentials. User: Tigerclaw | Pass:
+                            TGW773</div>
+                    </form>
+                </div>
+            </div>
+
+            <div id="screen-menu" class="screen hidden fade-in">
+                <div style="text-align: center; padding: 24px 20px 0;">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/59/SAP_2011_logo.svg" alt="SAP Logo"
+                        style="height: 35px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));">
+                </div>
+                <div class="menu-grid">
+                    <div class="menu-tile" onclick="navTo('screen-inbound')">
+                        <div class="tile-icon">📥</div>
+                        <div class="tile-title">Inbound</div>
+                        <div class="tile-subtitle">PO Receipt</div>
+                    </div>
+                    <div class="menu-tile" onclick="navTo('screen-internal')">
+                        <div class="tile-icon">🔄</div>
+                        <div class="tile-title">Internal</div>
+                        <div class="tile-subtitle">Material Move</div>
+                    </div>
+                    <div class="menu-tile" onclick="navTo('screen-outbound')">
+                        <div class="tile-icon">📤</div>
+                        <div class="tile-title">Outbound</div>
+                        <div class="tile-subtitle">Pick & Ship</div>
+                    </div>
+                    <div class="menu-tile" onclick="navTo('screen-kitting')">
+                        <div class="tile-icon">🧩</div>
+                        <div class="tile-title">Kitting</div>
+                        <div class="tile-subtitle">Work Orders</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="screen-inbound" class="screen hidden slide-in">
+                <div class="screen-header">
+                    <button class="btn-back" onclick="navTo('screen-menu')">◀</button>
+                    <h2>Inbound Receipt</h2>
+                </div>
+                <div class="form-panel">
+                    <div class="input-group">
+                        <label>Scan LPN (Try 7738185270)</label>
+                        <input type="text" id="inbound-lpn" autocomplete="off" placeholder="Scan LPN...">
+                    </div>
+                    <button class="btn btn-primary btn-block" onclick="processInbound()">Enter</button>
+                </div>
+            </div>
+
+            <div id="screen-inbound-detail" class="screen hidden slide-in">
+                <div class="screen-header">
+                    <button class="btn-back" onclick="navTo('screen-inbound')">◀</button>
+                    <h2>Confirm Receipt</h2>
+                </div>
+                <div class="data-panel" style="margin-bottom: 8px; padding-bottom: 8px;">
+                    <div class="data-row"><span>PO:</span> <strong id="val-po">PO-12345</strong></div>
+                    <div class="data-row"><span>Origin:</span> <strong id="val-origin">Chicago, IL</strong></div>
+                    <div class="data-row"><span>Content:</span> <strong id="val-content">50 Cases Spiquita</strong>
+                    </div>
+                    <div class="data-row"><span>Cases QTY:</span> <strong id="val-qty">50</strong></div>
+                </div>
+                <div class="form-panel" style="margin-top: 0;">
+                    <div class="input-group">
+                        <label>Move to Location - Scan Location</label>
+                        <input type="text" id="inbound-location" autocomplete="off" placeholder="Scan Location...">
+                    </div>
+                    <p style="margin-bottom: 16px; font-weight: 500; text-align: center;">Complete:</p>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="btn btn-primary" style="flex: 1;" onclick="confirmInbound('Y')">Y (Yes)</button>
+                        <button class="btn btn-secondary" style="flex: 1;" onclick="confirmInbound('N')">N (No)</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="screen-inbound-lov" class="screen hidden slide-in">
+                <div class="screen-header">
+                    <button class="btn-back" onclick="navTo('screen-menu')">◀ Home</button>
+                    <h2>LOV Confirmation</h2>
+                </div>
+                <div class="list-panel">
+                    <ul>
+                        <li>POST_OTIF</li>
+                        <li>POST_PART</li>
+                        <li>POST_XDK</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="screen-kitting" class="screen hidden slide-in">
+                <div class="screen-header">
+                    <button class="btn-back" onclick="navTo('screen-menu')">◀</button>
+                    <h2>Kitting</h2>
+                </div>
+                <div class="form-panel">
+                    <div class="input-group">
+                        <label>Scan Kit Header (Try KIT-9900)</label>
+                        <input type="text" id="kitting-header" autocomplete="off" placeholder="Scan Kit...">
+                    </div>
+                    <button class="btn btn-primary btn-block" onclick="processKittingHeader()">Enter</button>
+                </div>
+            </div>
+
+            <div id="screen-kitting-scan" class="screen hidden slide-in">
+                <div class="screen-header">
+                    <button class="btn-back" onclick="navTo('screen-kitting')">◀</button>
+                    <h2>Kit Assembly</h2>
+                </div>
+                <div class="form-panel">
+                    <div class="input-group">
+                        <label>Scan Item (<span id="kitting-count">0</span> items scanned)</label>
+                        <input type="text" id="kitting-item" autocomplete="off" placeholder="Scan Component...">
+                        <button class="btn btn-secondary btn-block" style="margin-top: 12px;"
+                            onclick="addKittingItem()">Submit Scan</button>
+                    </div>
+
+                    <p style="margin-bottom: 16px; font-weight: 500; text-align: center; margin-top: 24px;">Finish
+                        Kitting:</p>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="btn btn-primary" style="flex: 1;" onclick="finishKitting('Y')">Y
+                            (Confirm)</button>
+                        <button class="btn btn-secondary" style="flex: 1;" onclick="finishKitting('N')">N
+                            (Continue)</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="screen-internal" class="screen hidden slide-in">
+                <div class="screen-header">
+                    <button class="btn-back" onclick="navTo('screen-menu')">◀</button>
+                    <h2>Internal Move</h2>
+                </div>
+                <div class="form-panel">
+                    <div class="input-group">
+                        <label>Scan/enter Item(s)</label>
+                        <input type="text" id="internal-item" autocomplete="off" placeholder="Scan Item...">
+                    </div>
+                    <div class="input-group">
+                        <label>From Location</label>
+                        <input type="text" id="internal-source" autocomplete="off" placeholder="Scan Source...">
+                    </div>
+                    <div class="input-group">
+                        <label>To Location</label>
+                        <input type="text" id="internal-dest" autocomplete="off" placeholder="Scan Destination...">
+                    </div>
+                    <p style="margin-bottom: 16px; font-weight: 500; text-align: center;">Confirm Transfer:</p>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="btn btn-primary" style="flex: 1;" onclick="processInternal('Y')">Y</button>
+                        <button class="btn btn-secondary" style="flex: 1;" onclick="processInternal('N')">N</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="screen-outbound" class="screen hidden slide-in">
+                <div class="screen-header">
+                    <button class="btn-back" onclick="navTo('screen-menu')">◀</button>
+                    <h2>Outbound Shipping</h2>
+                </div>
+                <div class="form-panel">
+                    <div class="input-group">
+                        <label>Scan / enter delivery number</label>
+                        <input type="text" id="outbound-delivery" autocomplete="off" placeholder="Scan Delivery...">
+                    </div>
+                    <button class="btn btn-primary btn-block" onclick="processOutboundDelivery()">Start
+                        Delivery</button>
+                </div>
+            </div>
+
+            <div id="screen-outbound-pallet" class="screen hidden slide-in">
+                <div class="screen-header">
+                    <button class="btn-back" onclick="navTo('screen-outbound')">◀</button>
+                    <h2>Ship Pallets</h2>
+                </div>
+                <div class="form-panel" style="margin-bottom: 8px;">
+                    <div class="input-group">
+                        <label>Scan/enter Pallet (<span id="pallet-count">0</span> scanned)</label>
+                        <input type="text" id="outbound-pallet" autocomplete="off" placeholder="Scan Pallet...">
+                        <button class="btn btn-secondary btn-block" style="margin-top: 12px;"
+                            onclick="addOutboundPallet()">Submit Pallet</button>
+                    </div>
+                </div>
+                <div class="form-panel" style="margin-top: 0;" id="outbound-end-panel">
+                    <p style="margin-bottom: 16px; font-weight: 500; text-align: center;">End Shipping:</p>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="btn btn-primary" style="flex: 1;" onclick="endOutbound('Y')">Y</button>
+                        <button class="btn btn-secondary" style="flex: 1;" onclick="endOutbound('N')">N</button>
+                    </div>
+                </div>
+                <div class="form-panel hidden" style="margin-top: 0;" id="outbound-confirm-panel">
+                    <button class="btn btn-primary btn-block" onclick="confirmOutboundShip()">Ship Confirm</button>
+                </div>
+            </div>
+        </main>
+
+        <footer id="app-footer" class="hidden">
+            <div class="bottom-nav">
+                <div class="nav-item" onclick="goBack()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" fill="currentColor" />
+                    </svg>
+                    <span>Back</span>
+                </div>
+                <div class="nav-item" onclick="navTo('screen-menu')">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="currentColor" />
+                    </svg>
+                    <span>Home</span>
+                </div>
+                <div class="nav-item" onclick="location.reload()">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"
+                            fill="currentColor" />
+                    </svg>
+                    <span>Refresh</span>
+                </div>
+                <div class="nav-item" onclick="openAdminInfo()">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"
+                            fill="currentColor" />
+                    </svg>
+                    <span>Reports</span>
+                </div>
+                <div class="nav-item" onclick="logout()">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"
+                            fill="currentColor" />
+                    </svg>
+                    <span>Logout</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Overlays -->
+    <div id="overlay-loading" class="overlay hidden">
+        <div class="spinner-container">
+            <div class="hourglass"></div>
+            <div id="loading-text" class="loading-text">Loading...</div>
+        </div>
+    </div>
+
+    <div id="overlay-error" class="overlay hidden">
+        <div class="error-modal">
+            <h3 class="error-title">NETWORK ERROR</h3>
+            <p id="error-message">Socket Timeout (Error 408)</p>
+            <button id="btn-error-retry" class="btn btn-secondary btn-block"
+                onclick="closeErrorOverlay()">Retry</button>
+        </div>
+    </div>
+
+    <div id="overlay-diagnostic" class="overlay hidden"
+        style="z-index: 200; background: var(--white); align-items: flex-start; justify-content: flex-start;">
+        <div
+            style="display: flex; flex-direction: column; width: 100%; height: 100%; position: absolute; top: 0; left: 0;">
+            <div class="screen-header"
+                style="background: var(--fiori-blue); color: var(--white); border-bottom: none; display: flex; align-items: center;">
+                <button class="btn-back"
+                    style="background: transparent; color: var(--white); font-size: 1.2rem; width: auto; height: auto; padding: 8px;"
+                    onclick="closeDiagnosticOverlay()">✕ Close</button>
+                <div
+                    style="flex-grow: 1; text-align: right; display: flex; justify-content: flex-end; align-items: center; gap: 8px; padding-right: 8px;">
+                    <button onclick="zoomIframe(-0.1)"
+                        style="padding: 6px 12px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); border-radius: 6px; color: white; font-weight: bold;">-</button>
+                    <button onclick="zoomIframe(0)"
+                        style="padding: 6px 12px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); border-radius: 6px; color: white; font-size: 0.8rem;">Reset</button>
+                    <button onclick="zoomIframe(0.1)"
+                        style="padding: 6px 12px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); border-radius: 6px; color: white; font-weight: bold;">+</button>
+                </div>
+            </div>
+            <div style="flex-grow: 1; position: relative; overflow: auto; width: 100%; background: var(--light-gray);">
+                <div id="iframe-zoom-container"
+                    style="width: 200%; height: 200%; transform-origin: top left; transform: scale(0.5); transition: transform 0.2s, width 0.2s, height 0.2s;">
+                    <iframe src="https://msi-demo.com:7200/urw"
+                        style="width: 100%; height: 100%; border: none;"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="overlay-admin" class="overlay hidden">
+        <div class="admin-modal">
+            <h3>Simulated IT Portal</h3>
+            <p>Analysis of these delays is available at</p>
+            <a href="http://msi-demo.com/msi/index.htm" target="_blank"
+                class="admin-url">http://msi-demo.com/msi/index.htm</a>
+            <p class="admin-subtext">for Root Cause Diagnosis (Network vs. Host vs. Device).</p>
+            <br />
+            <button class="btn btn-primary btn-block" onclick="closeAdminInfo()">Close</button>
+        </div>
+    </div>
+
+    <div id="overlay-success" class="overlay hidden">
+        <div class="admin-modal" style="border-top: 6px solid var(--pulse-green);">
+            <h3 class="success-txt" id="success-title" style="margin-bottom: 12px; font-size: 1.4rem;">Success</h3>
+            <p id="success-message"
+                style="margin-bottom: 24px; font-weight: 500; font-size: 1.1rem; color: var(--fiori-blue-dark);">Action
+                Confirmed</p>
+            <button id="btn-success-ok" class="btn btn-primary btn-block">OK</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

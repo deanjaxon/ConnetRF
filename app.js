@@ -169,10 +169,20 @@ async function confirmInbound(choice) {
 
 // --- KITTING ---
 let kittingCount = 0;
+let kittingGlitchDone = false;
 
 async function processKittingHeader() {
     const kit = document.getElementById('kitting-header').value.trim();
     
+    if (kit === '6305551212' && !kittingGlitchDone) {
+        showLoading("404 - Reloding Page - Please wait");
+        await sleep(5000);
+        hideLoading();
+        kittingGlitchDone = true;
+        return;
+    }
+    
+    kittingGlitchDone = false; // reset for normal flow
     showLoading("Verifying Work Order...");
     await sleep(150);
     hideLoading();
@@ -243,6 +253,15 @@ async function processInternal(choice) {
     }
     
     // Confirm: Y
+    const item = document.getElementById('internal-item').value.trim();
+    if (item === '6307762361') {
+        showLoading("404 - Reloding Page - Please wait");
+        await sleep(5000);
+        hideLoading();
+        // Return screen to normal so the user can continue
+        return;
+    }
+
     showLoading("Processing Transfer...");
     await sleep(200);
     hideLoading();
@@ -255,10 +274,21 @@ async function processInternal(choice) {
 
 // --- OUTBOUND ---
 let palletCount = 0;
+let outboundGlitchDone = false;
 
 async function processOutboundDelivery() {
     const del = document.getElementById('outbound-delivery').value.trim();
     
+    if (del === '6305551212' && !outboundGlitchDone) {
+        showLoading("404 - Reloding Page - Please wait");
+        await sleep(5000);
+        hideLoading();
+        outboundGlitchDone = true;
+        return;
+    }
+    
+    outboundGlitchDone = false; // reset for next try
+
     if (del === '7738185270') {
         showLoading("Waiting on Server...");
         await sleep(5000);
@@ -287,14 +317,28 @@ function addOutboundPallet() {
     document.getElementById('outbound-pallet').value = '';
 }
 
-function endOutbound(choice) {
+async function endOutbound(choice) {
     if (choice === 'N') {
         document.getElementById('outbound-pallet').focus();
         return;
     }
     
     // End: Y
+    const del = document.getElementById('outbound-delivery').value.trim();
     document.getElementById('outbound-end-panel').classList.add('hidden');
+    
+    if (del === '6305551212') {
+        showLoading("Stock on Resource Vialotion - Report Issue #LPN1200");
+        await sleep(5000);
+        hideLoading();
+        document.getElementById('outbound-issue-panel').classList.remove('hidden');
+    } else {
+        document.getElementById('outbound-confirm-panel').classList.remove('hidden');
+    }
+}
+
+function reportOutboundIssue() {
+    document.getElementById('outbound-issue-panel').classList.add('hidden');
     document.getElementById('outbound-confirm-panel').classList.remove('hidden');
 }
 
@@ -348,6 +392,12 @@ function openDiagnosticOverlay() {
 function closeDiagnosticOverlay() {
     overlayDiagnostic.classList.add('hidden');
 }
+
+window.addEventListener('message', function(event) {
+    if (event.data === 'closeDiagnosticOverlay') {
+        closeDiagnosticOverlay();
+    }
+});
 
 let iframeScale = 0.5;
 

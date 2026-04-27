@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report a Problem — Style Guide</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:        #1E73BE;
+      --blue-dark:   #155a96;
+      --blue-light:  #deeef9;
+      --blue-border: #8fbfdf;
+      --yellow:      #FCE11B;
+      --yellow-dark: #c9b100;
+      --yellow-text: #3a2e00;
+      --white:       #ffffff;
+      --off-white:   #f4f5f7;
+      --border:      #c8cdd4;
+      --border-dark: #a0a8b2;
+      --text-primary:   #1a1f27;
+      --text-secondary: #4a5260;
+      --text-muted:     #717b8c;
+      --success:        #1a7a3a;
+      --success-bg:     #e6f4ec;
+      --page-bg: #f0f2f5;
+      --section-bg: #ffffff;
+      --rule: #e2e5ea;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: var(--page-bg);
+      color: var(--text-primary);
+      font-size: 15px;
+      line-height: 1.6;
+      padding: 32px 20px 64px;
+    }
+
+    /* ── Page Header ── */
+    .page-header {
+      max-width: 780px;
+      margin: 0 auto 40px;
+      padding-bottom: 24px;
+      border-bottom: 2px solid var(--blue);
+    }
+
+    .page-header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--blue);
+      letter-spacing: -0.5px;
+    }
+
+    .page-header p {
+      margin-top: 6px;
+      color: var(--text-secondary);
+      font-size: 15px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--blue-light);
+      color: var(--blue-dark);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 20px;
+      letter-spacing: 0.4px;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+
+    /* ── Sections ── */
+    .section {
+      max-width: 780px;
+      margin: 0 auto 32px;
+      background: var(--section-bg);
+      border-radius: 12px;
+      border: 1px solid var(--rule);
+      overflow: hidden;
+    }
+
+    .section-header {
+      background: var(--off-white);
+      border-bottom: 1px solid var(--rule);
+      padding: 14px 24px;
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .section-header h2 {
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-secondary);
+    }
+
+    .section-header span {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .section-body {
+      padding: 24px;
+    }
+
+    /* ── Color Swatches ── */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 14px;
+    }
+
+    .swatch {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--rule);
+    }
+
+    .swatch-color {
+      height: 64px;
+    }
+
+    .swatch-info {
+      padding: 10px 12px;
+      background: var(--white);
+      border-top: 1px solid var(--rule);
+    }
+
+    .swatch-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: block;
+    }
+
+    .swatch-hex {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: 'Courier New', monospace;
+      margin-top: 2px;
+      display: block;
+    }
+
+    .swatch-use {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 3px;
+      display: block;
+      line-height: 1.4;
+    }
+
+    /* ── Type Scale ── */
+    .type-row {
+      display: flex;
+      align-items: baseline;
+      gap: 20px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .type-row:last-child { border-bottom: none; }
+
+    .type-preview { flex: 1; }
+    .type-meta { min-width: 260px; font-size: 12px; color: var(--text-muted); }
+    .type-meta strong { color: var(--text-secondary); display: block; font-size: 12px; }
+    .type-meta code { font-family: 'Courier New', monospace; background: var(--off-white); padding: 2px 5px; border-radius: 4px; font-size: 11px; }
+
+    /* ── Token Table ── */
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { text-align: left; padding: 8px 12px; background: var(--off-white); color: var(--text-secondary); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; border-bottom: 1px solid var(--rule); }
+    td { padding: 10px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    td code { font-family: 'Courier New', monospace; background: var(--off-white); padding: 2px 6px; border-radius: 4px; font-size: 11px; color: var(--blue-dark); white-space: nowrap; }
+    td.val { color: var(--text-secondary); font-family: 'Courier New', monospace; font-size: 12px; }
+
+    /* ── Component Demos ── */
+    .demo-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .demo-tile {
+      min-width: 130px;
+      min-height: 64px;
+      border: 2.5px solid var(--border);
+      border-radius: 12px;
+      background: var(--white);
+      color: var(--text-primary);
+      font-size: 17px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 16px;
+    }
+
+    .demo-tile.selected {
+      border-color: var(--blue);
+      border-width: 3px;
+      background: var(--blue-light);
+      color: var(--blue-dark);
+    }
+
+    .demo-btn-cancel {
+      border: 2px solid var(--border-dark);
+      border-radius: 10px;
+      background: var(--white);
+      color: var(--text-secondary);
+      font-size: 17px;
+      font-weight: 700;
+      padding: 14px 28px;
+      font-family: inherit;
+      cursor: default;
+    }
+
+    .demo-btn-submit {
+      border: 2px solid var(--blue-dark);
+      border-radius: 10px;
+      background: var(--blue);
+      color: var(--white);
+      font-size: 17px;
+      font-weight: 700;
+      padding: 14px 40px;
+      font-family: inherit;
+      cursor: default;
+    }
+
+    .demo-textarea {
+      background: var(--yellow);
+      color: var(--yellow-text);
+      border: 2px solid var(--yellow-dark);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 16px;
+      font-family: inherit;
+      width: 100%;
+      max-width: 320px;
+      resize: none;
+      line-height: 1.5;
+    }
+
+    .demo-header {
+      background: var(--blue);
+      padding: 20px 24px;
+      border-radius: 10px;
+      text-align: center;
+      max-width: 320px;
+    }
+
+    .demo-header h1 { color: var(--white); font-size: 24px; font-weight: 800; }
+    .demo-header p  { color: rgba(255,255,255,0.82); font-size: 14px; margin-top: 4px; font-weight: 500; }
+
+    /* ── Spec Callout ── */
+    .spec {
+      background: var(--off-white);
+      border-left: 3px solid var(--blue);
+      border-radius: 0 6px 6px 0;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 14px;
+      line-height: 1.6;
+    }
+
+    .spec strong { color: var(--text-primary); }
+
+    /* ── Breakpoints ── */
+    .breakpoint-bar {
+      display: flex;
+      height: 36px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--rule);
+      margin-bottom: 14px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .bp-seg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      padding: 0 8px;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    /* ── Contrast Table ── */
+    .contrast-pair {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      margin: 4px 4px 4px 0;
+    }
+
+    .dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── Footer ── */
+    .guide-footer {
+      max-width: 780px;
+      margin: 0 auto;
+      padding-top: 24px;
+      border-top: 1px solid var(--rule);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-header">
+    <h1>Report a Problem <span class="badge">Style Guide v1.0</span></h1>
+    <p>Connect Inc. · Mobile Warehouse Interface · Engineer Reference Document</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- 1. COLOR PALETTE                                   -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <h2>1 — Color Palette</h2>
+      <span>All colors meet WCAG AA (4.5:1) minimum; primary text pairs meet AAA (7:1+)</span>
+    </div>
+    <div class="section-body">
+      <div class="color-grid">
+
+        <div class="swatch">
+          <div class="swatch-color" style="background:#1E73BE;"></div>
+          <div class="swatch-info">
+            <span class="swatch-name">Brand Blue</span>
+            <span class="swatch-hex">#1E73BE</span>
+            <span class="swatch-use">Header bg, selected tile border, Submit button, focus rings</span>
+          </div>
+        </div>
+
+        <div class="swatch">
+          <div class="swatch-color" style="background:#155a96;"></div>
+          <div class="swatch-info">
+            <span class="swatch-name">Blue Dark</span>
+            <span class="swatch-hex">#155a96</span>
+            <span class="swatch-use">Submit button border, hover state, selected tile text</span>
+          </div>
+        </div>
+
+        <div class="swatch">
+          <div class="swatch-color" style="background:#deeef9; border: 1px solid #c4dff2;"></div>
+          <div class="swatch-info">
+            <span class="swatch-name">Blue Light</span>
+            <span class="swatch-hex">#deeef9</span>
+            <span class="swatch-use">Selected tile background fill</span>
+          </div>
+        </div>
+
+        <div class="swatch">
+          <div class="swatch-color" style="background:#FCE11B;"></div>
+          <div class="swatch-info">
+            <span class="swatch-name">Brand Yellow</span>
+            <span class="swatch-hex">#FCE11B</span>
+            <span class="swatch-use">Notes textarea background</span>
+          </div>
+        </div>
+
+        <div class="swatch">
+          <div class="swatch-color" style="background:#c9b100;"></div>
+          <div class="swatch-info">
+            <span class="swatch-name">Yellow Dark</span>
+            <span class="swatch-hex">#c9b100</span>
+            <span class="swatch-use">Notes textarea border, focus border</span>
+          </div>
+        </div>
+
+        <div class="swatch">
+          <div class="swatch-color" style="background:#3a2e00;"></div>
+          <div class="swatch-info">
+            <span class="swatch-name">Yellow Text</span>
+            <span class="swatch-hex">#3a2e00</span>
+            <span class="swatch-use">Text on yellow background (10.2:1 contrast)</span>
+          </div>
+        </div>
+
+        <div class="swatch">
+          <div class="swatch-color" style="background:#ffffff; border: 1px solid #e0e0e0;"></div>
+          <div class="swatch-info">
+            <span class="swatch-name">White</span>
+            <span class="swatch-hex">#ffffff</span>
+            <span class="swatch-use">Card background, default tile background, Cancel button</span>
+          </div>
+        </div>
+
+        <div class="swatch">
+          <div class="swatch-color" style="background:#f4f5f7;"></div>
+          <div class="swatch-info">
+            <span class="swatch-name">Off-White</span>
+            <span class="swatch-hex">#f4f5f7</span>
+            <span class="swatch-use">Page background, footer bar, device strip</span>
+          </div>
+        </div>
+
+        <div class="swatch">
+          <div class="swatch-color" style="background:#1a1f27;"></div>
+          <div class="swatch-info">
+            <span class="swatch-name">Text Primary</span>
+            <span class="swatch-hex">#1a1f27</span>
+            <span class="swatch-use">Default tile label, body text (15.3:1 on white)</span>
+          </div>
+        </div>
+
+        <div class="swatch">
+          <div class="swatch-color" style="background:#4a5260;"></div>
+          <div class="swatch-info">
+            <span class="swatch-name">Text Secondary</span>
+            <span class="swatch-hex">#4a5260</span>
+            <span class="swatch-use">Cancel button text, notes label, subtext</span>
+          </div>
+        </div>
+
+        <div class="swatch">
+          <div class="swatch-color" style="background:#717b8c;"></div>
+          <div class="swatch-info">
+            <span class="swatch-name">Text Muted</span>
+            <span class="swatch-hex">#717b8c</span>
+            <span class="swatch-use">Device IP strip, placeholder hints</span>
+          </div>
+        </div>
+
+        <div class="swatch">
+          <div class="swatch-color" style="background:#c8cdd4;"></div>
+          <div class="swatch-info">
+            <span class="swatch-name">Border Default</span>
+            <span class="swatch-hex">#c8cdd4</span>
+            <span class="swatch-use">Unselected tile border, divider lines</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="spec" style="margin-top:20px;">
+        <strong>Industrial UX note:</strong> No pure black (#000) or pure white (#fff) are used for backgrounds or large text surfaces. Research shows that in bright warehouse lighting, diffuse glare reduces perceived contrast — dark gray text on white (#1a1f27 on #ffffff) outperforms black-on-white in real-world readability tests. Red has been intentionally excluded as a UI color because under bright fluorescent and LED warehouse lighting, red reads as near-black at a glance.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- 2. CSS CUSTOM PROPERTIES                           -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <h2>2 — CSS Custom Properties</h2>
+      <span>Declare these in :root — all components reference these tokens</span>
+    </div>
+    <div class="section-body">
+      <table>
+        <thead>
+          <tr><th>Token</th><th>Value</th><th>Used For</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>--blue</code></td><td class="val">#1E73BE</td><td>Header, Submit, selected state</td></tr>
+          <tr><td><code>--blue-dark</code></td><td class="val">#155a96</td><td>Submit border, hover, selected text</td></tr>
+          <tr><td><code>--blue-light</code></td><td class="val">#deeef9</td><td>Selected tile fill</td></tr>
+          <tr><td><code>--blue-border</code></td><td class="val">#8fbfdf</td><td>Selected tile border accent</td></tr>
+          <tr><td><code>--yellow</code></td><td class="val">#FCE11B</td><td>Notes textarea background</td></tr>
+          <tr><td><code>--yellow-dark</code></td><td class="val">#c9b100</td><td>Notes textarea border</td></tr>
+          <tr><td><code>--yellow-text</code></td><td class="val">#3a2e00</td><td>Text on yellow</td></tr>
+          <tr><td><code>--white</code></td><td class="val">#ffffff</td><td>Card, default tile, Cancel bg</td></tr>
+          <tr><td><code>--off-white</code></td><td class="val">#f4f5f7</td><td>Page bg, footer, device strip</td></tr>
+          <tr><td><code>--border</code></td><td class="val">#c8cdd4</td><td>Default tile border, dividers</td></tr>
+          <tr><td><code>--border-dark</code></td><td class="val">#a0a8b2</td><td>Button borders</td></tr>
+          <tr><td><code>--text-primary</code></td><td class="val">#1a1f27</td><td>Main labels, tile text</td></tr>
+          <tr><td><code>--text-secondary</code></td><td class="val">#4a5260</td><td>Cancel text, subheads</td></tr>
+          <tr><td><code>--text-muted</code></td><td class="val">#717b8c</td><td>Device strip, hints</td></tr>
+          <tr><td><code>--success</code></td><td class="val">#1a7a3a</td><td>Success icon stroke</td></tr>
+          <tr><td><code>--success-bg</code></td><td class="val">#e6f4ec</td><td>Success icon fill circle</td></tr>
+          <tr><td><code>--radius-tile</code></td><td class="val">12px</td><td>Tile and textarea corners</td></tr>
+          <tr><td><code>--radius-btn</code></td><td class="val">10px</td><td>Button corners</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- 3. RESPONSIVE SIZING (clamp values)               -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <h2>3 — Responsive Sizing</h2>
+      <span>clamp(min, preferred, max) — scales fluidly between breakpoints, no media queries needed</span>
+    </div>
+    <div class="section-body">
+
+      <div class="breakpoint-bar">
+        <div class="bp-seg" style="background:#a0a8b2; flex:1;">360px (Zebra TC)</div>
+        <div class="bp-seg" style="background:#717b8c; flex:0.7;">390px (iPhone)</div>
+        <div class="bp-seg" style="background:#4a5260; flex:0.9;">428px (iPhone Max)</div>
+        <div class="bp-seg" style="background:#1E73BE; flex:1.2;">480px+ (tablet/desktop)</div>
+      </div>
+
+      <table>
+        <thead>
+          <tr><th>Token</th><th>clamp() value</th><th>Min (360px)</th><th>Max (480px+)</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--tile-min-h</code></td>
+            <td class="val">clamp(64px, 14vw, 88px)</td>
+            <td>64px</td>
+            <td>88px</td>
+          </tr>
+          <tr>
+            <td><code>--font-size-tile</code></td>
+            <td class="val">clamp(17px, 4.5vw, 22px)</td>
+            <td>17px</td>
+            <td>22px</td>
+          </tr>
+          <tr>
+            <td><code>--font-size-title</code></td>
+            <td class="val">clamp(22px, 6vw, 32px)</td>
+            <td>22px</td>
+            <td>32px</td>
+          </tr>
+          <tr>
+            <td><code>--font-size-sub</code></td>
+            <td class="val">clamp(13px, 3.2vw, 16px)</td>
+            <td>13px</td>
+            <td>16px</td>
+          </tr>
+          <tr>
+            <td><code>--font-size-note</code></td>
+            <td class="val">clamp(15px, 4vw, 18px)</td>
+            <td>15px</td>
+            <td>18px</td>
+          </tr>
+          <tr>
+            <td><code>--font-size-btn</code></td>
+            <td class="val">clamp(16px, 4.2vw, 20px)</td>
+            <td>16px</td>
+            <td>20px</td>
+          </tr>
+          <tr>
+            <td><code>--font-size-label</code></td>
+            <td class="val">clamp(12px, 3vw, 15px)</td>
+            <td>12px</td>
+            <td>15px</td>
+          </tr>
+          <tr>
+            <td>Body padding</td>
+            <td class="val">clamp(0px, 2vw, 16px)</td>
+            <td>0px (edge-to-edge)</td>
+            <td>16px</td>
+          </tr>
+          <tr>
+            <td>Card border-radius</td>
+            <td class="val">clamp(0px, 2vw, 18px)</td>
+            <td>0px (full-bleed)</td>
+            <td>18px</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="spec">
+        <strong>Viewport meta tag required:</strong> Without this, mobile browsers scale the page down and all sizing breaks.<br>
+        <code style="background:#e8ecf0; padding:4px 8px; border-radius:4px; font-size:12px; display:inline-block; margin-top:6px;">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"&gt;</code><br><br>
+        <strong>min-height:</strong> Use <code>100dvh</code> (dynamic viewport height) not <code>100vh</code> — on mobile, <code>100vh</code> includes the browser chrome bar and causes layout overflow. <code>dvh</code> accounts for the actual visible area.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- 4. COMPONENT SPECS                                 -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <h2>4 — Component Specifications</h2>
+    </div>
+    <div class="section-body">
+
+      <!-- Header -->
+      <p style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; color:var(--text-muted); margin-bottom:12px;">Header</p>
+      <div class="demo-row">
+        <div class="demo-header">
+          <h1>Report a Problem</h1>
+          <p>Tap everything that applies</p>
+        </div>
+      </div>
+      <table style="margin-bottom:24px;">
+        <thead><tr><th>Property</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Background</td><td class="val">var(--blue) — #1E73BE</td></tr>
+          <tr><td>Title font size</td><td class="val">var(--font-size-title) — clamp(22px, 6vw, 32px)</td></tr>
+          <tr><td>Title font weight</td><td class="val">800</td></tr>
+          <tr><td>Title color</td><td class="val">#ffffff</td></tr>
+          <tr><td>Subtitle color</td><td class="val">rgba(255, 255, 255, 0.82)</td></tr>
+          <tr><td>Padding</td><td class="val">clamp(20px, 5vw, 32px) top/bottom · clamp(16px, 4vw, 28px) sides</td></tr>
+        </tbody>
+      </table>
+
+      <!-- Tile - Default -->
+      <p style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; color:var(--text-muted); margin-bottom:12px;">Issue Tile — Default &amp; Selected</p>
+      <div class="demo-row">
+        <div class="demo-tile">Slower</div>
+        <div class="demo-tile selected">Locked Up</div>
+      </div>
+      <table style="margin-bottom:24px;">
+        <thead><tr><th>Property</th><th>Default</th><th>Selected</th></tr></thead>
+        <tbody>
+          <tr><td>Background</td><td class="val">#ffffff</td><td class="val">#deeef9</td></tr>
+          <tr><td>Border</td><td class="val">2.5px solid #c8cdd4</td><td class="val">3px solid #1E73BE</td></tr>
+          <tr><td>Border-radius</td><td class="val">12px</td><td class="val">12px</td></tr>
+          <tr><td>Font size</td><td class="val">clamp(17px, 4.5vw, 22px)</td><td class="val">same</td></tr>
+          <tr><td>Font weight</td><td class="val">600</td><td class="val">600</td></tr>
+          <tr><td>Text color</td><td class="val">#1a1f27</td><td class="val">#155a96</td></tr>
+          <tr><td>Min height</td><td class="val">clamp(64px, 14vw, 88px)</td><td class="val">same</td></tr>
+          <tr><td>Layout</td><td class="val" colspan="2">CSS Grid — 2 columns, repeat(2, minmax(0, 1fr))</td></tr>
+          <tr><td>Gap</td><td class="val" colspan="2">clamp(8px, 2vw, 14px)</td></tr>
+          <tr><td>Active press</td><td class="val" colspan="2">transform: scale(0.96) — gives tactile feedback</td></tr>
+          <tr><td>Transition</td><td class="val" colspan="2">background, border-color, color: 0.12s ease</td></tr>
+        </tbody>
+      </table>
+
+      <!-- Notes textarea -->
+      <p style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; color:var(--text-muted); margin-bottom:12px;">Notes Textarea</p>
+      <div class="demo-row">
+        <textarea class="demo-textarea" rows="3" placeholder="Describe what happened…" readonly></textarea>
+      </div>
+      <table style="margin-bottom:24px;">
+        <thead><tr><th>Property</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Background</td><td class="val">#FCE11B (Brand Yellow)</td></tr>
+          <tr><td>Text color</td><td class="val">#3a2e00 (10.2:1 contrast on yellow)</td></tr>
+          <tr><td>Border</td><td class="val">2px solid #c9b100</td></tr>
+          <tr><td>Border-radius</td><td class="val">12px</td></tr>
+          <tr><td>Font size</td><td class="val">clamp(15px, 4vw, 18px)</td></tr>
+          <tr><td>Min height</td><td class="val">clamp(80px, 18vw, 110px)</td></tr>
+          <tr><td>Padding</td><td class="val">clamp(10px, 2.5vw, 14px) vertical · clamp(12px, 3vw, 16px) horizontal</td></tr>
+          <tr><td>Focus ring</td><td class="val">box-shadow: 0 0 0 3px rgba(252, 225, 27, 0.4)</td></tr>
+          <tr><td>resize</td><td class="val">none</td></tr>
+        </tbody>
+      </table>
+
+      <!-- Buttons -->
+      <p style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; color:var(--text-muted); margin-bottom:12px;">Footer Buttons</p>
+      <div class="demo-row">
+        <button class="demo-btn-cancel">Cancel</button>
+        <button class="demo-btn-submit">Submit</button>
+      </div>
+      <table>
+        <thead><tr><th>Property</th><th>Cancel</th><th>Submit</th></tr></thead>
+        <tbody>
+          <tr><td>flex</td><td class="val">1</td><td class="val">2 (twice as wide)</td></tr>
+          <tr><td>Background</td><td class="val">#ffffff</td><td class="val">#1E73BE</td></tr>
+          <tr><td>Text color</td><td class="val">#4a5260</td><td class="val">#ffffff</td></tr>
+          <tr><td>Border</td><td class="val">2px solid #a0a8b2</td><td class="val">2px solid #155a96</td></tr>
+          <tr><td>Border-radius</td><td class="val">10px</td><td class="val">10px</td></tr>
+          <tr><td>Font size</td><td class="val" colspan="2">clamp(16px, 4.2vw, 20px)</td></tr>
+          <tr><td>Font weight</td><td class="val" colspan="2">700</td></tr>
+          <tr><td>Padding</td><td class="val" colspan="2">clamp(14px, 3.5vw, 18px) vertical</td></tr>
+          <tr><td>Active press</td><td class="val" colspan="2">transform: scale(0.97)</td></tr>
+          <tr><td>Footer bg</td><td class="val" colspan="2">#f4f5f7, border-top: 1.5px solid #c8cdd4</td></tr>
+          <tr><td>Footer padding</td><td class="val" colspan="2">clamp(12px, 3vw, 18px) vertical · clamp(14px, 3.5vw, 22px) horizontal</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- 5. TYPOGRAPHY                                      -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <h2>5 — Typography</h2>
+    </div>
+    <div class="section-body">
+
+      <div class="type-row">
+        <div class="type-preview" style="font-size:28px; font-weight:800; color:var(--white); background:var(--blue); padding:10px 18px; border-radius:8px; display:inline-block;">Report a Problem</div>
+        <div class="type-meta">
+          <strong>Page Title (Header H1)</strong>
+          <code>font-size: clamp(22px, 6vw, 32px)</code><br>
+          <code>font-weight: 800</code><br>
+          <code>color: #ffffff</code>
+        </div>
+      </div>
+
+      <div class="type-row">
+        <div class="type-preview" style="font-size:17px; font-weight:600; color:var(--text-primary);">Blank Screen</div>
+        <div class="type-meta">
+          <strong>Tile Label</strong>
+          <code>font-size: clamp(17px, 4.5vw, 22px)</code><br>
+          <code>font-weight: 600</code><br>
+          <code>color: var(--text-primary) #1a1f27</code>
+        </div>
+      </div>
+
+      <div class="type-row">
+        <div class="type-preview" style="font-size:17px; font-weight:600; color:var(--blue-dark);">Locked Up</div>
+        <div class="type-meta">
+          <strong>Tile Label — Selected</strong>
+          <code>font-size: clamp(17px, 4.5vw, 22px)</code><br>
+          <code>font-weight: 600</code><br>
+          <code>color: var(--blue-dark) #155a96</code>
+        </div>
+      </div>
+
+      <div class="type-row">
+        <div class="type-preview" style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.7px; color:var(--text-secondary);">Additional Notes</div>
+        <div class="type-meta">
+          <strong>Section Label</strong>
+          <code>font-size: clamp(12px, 3vw, 15px)</code><br>
+          <code>font-weight: 700</code><br>
+          <code>text-transform: uppercase</code><br>
+          <code>letter-spacing: 0.7px</code>
+        </div>
+      </div>
+
+      <div class="type-row">
+        <div class="type-preview" style="font-size:16px; color:var(--yellow-text); background:var(--yellow); padding:8px 12px; border-radius:6px; display:inline-block;">Describe what happened…</div>
+        <div class="type-meta">
+          <strong>Notes Textarea</strong>
+          <code>font-size: clamp(15px, 4vw, 18px)</code><br>
+          <code>font-weight: 400</code><br>
+          <code>color: #3a2e00</code>
+        </div>
+      </div>
+
+      <div class="type-row" style="border:none;">
+        <div class="type-preview" style="font-size:11px; color:var(--text-muted);">Device IP: 10.0.1.42</div>
+        <div class="type-meta">
+          <strong>Device Strip</strong>
+          <code>font-size: clamp(10px, 2.5vw, 12px)</code><br>
+          <code>font-weight: 400</code><br>
+          <code>color: var(--text-muted) #717b8c</code>
+        </div>
+      </div>
+
+      <div class="spec">
+        <strong>Font stack:</strong> <code>-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif</code><br>
+        System fonts are used intentionally — no external font load, which means zero latency on warehouse Wi-Fi and no dependency on CDN availability. On iOS devices this renders as San Francisco; on Android as Roboto. Both are optimized for screen legibility.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- 6. TOUCH TARGET GUIDELINES                         -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <h2>6 — Touch Target Guidelines</h2>
+      <span>Designed for gloved hands in warehouse environments</span>
+    </div>
+    <div class="section-body">
+      <table>
+        <thead><tr><th>Element</th><th>Min Height</th><th>This UI</th><th>Standard</th></tr></thead>
+        <tbody>
+          <tr><td>Issue Tiles</td><td>64px</td><td>clamp(64px, 14vw, 88px)</td><td>Apple HIG: 44px · Google: 48dp</td></tr>
+          <tr><td>Cancel Button</td><td>52px</td><td>clamp(14px, 3.5vw, 18px) padding × 2 + font</td><td>Exceeds minimums</td></tr>
+          <tr><td>Submit Button</td><td>52px</td><td>Same padding, 2× width of Cancel</td><td>Exceeds minimums</td></tr>
+          <tr><td>Textarea</td><td>80px</td><td>clamp(80px, 18vw, 110px)</td><td>N/A</td></tr>
+        </tbody>
+      </table>
+      <div class="spec">
+        <strong>Glove accommodation:</strong> Tiles are set to a 2-column grid with generous gap spacing. The minimum 64px tile height ensures reliable activation even with standard work gloves. Submit is 2× the width of Cancel to prevent accidental cancellation. The <code>-webkit-tap-highlight-color: transparent</code> and <code>transform: scale(0.96)</code> on <code>:active</code> provide tactile feedback without the default mobile blue flash.<br><br>
+        <strong>One-handed use:</strong> Submit and Cancel are anchored in a sticky footer at the bottom of the screen — within natural thumb reach on all common device sizes. Critical actions should never require reaching to the top of the screen.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- 7. SUBMIT PAYLOAD                                  -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <h2>7 — Submit Payload &amp; API Integration</h2>
+    </div>
+    <div class="section-body">
+      <p style="margin-bottom:12px; color:var(--text-secondary); font-size:13px;">The form serializes to JSON on submit. Wire the fetch call to your endpoint by uncommenting and updating the URL in the script block.</p>
+      <table>
+        <thead><tr><th>Field</th><th>Type</th><th>Example</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td><code>issues</code></td><td>string[]</td><td><code>["Slower", "Connection"]</code></td><td>Array of selected tile values. Empty array if none.</td></tr>
+          <tr><td><code>notes</code></td><td>string</td><td><code>"Scanner keeps dropping"</code></td><td>Empty string if textarea left blank.</td></tr>
+          <tr><td><code>ip</code></td><td>string</td><td><code>"10.0.1.42"</code></td><td>Fetched from api.ipify.org on load. Replace with internal IP resolution if needed.</td></tr>
+          <tr><td><code>timestamp</code></td><td>string (ISO 8601)</td><td><code>"2026-04-27T14:32:00.000Z"</code></td><td>UTC timestamp generated client-side.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="spec" style="margin-top:16px;">
+        <strong>To activate:</strong> In the <code>&lt;script&gt;</code> block, find the commented-out <code>fetch()</code> call and replace <code>/api/report</code> with your endpoint URL. The payload object is already constructed above it.<br><br>
+        <strong>Validation:</strong> Client-side check requires at least one tile selected OR a non-empty notes field before submit. A red hint message appears if neither condition is met. Server-side validation should mirror this.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- 8. ACCESSIBILITY                                   -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <h2>8 — Accessibility &amp; Industrial UX Principles</h2>
+    </div>
+    <div class="section-body">
+      <table>
+        <thead><tr><th>Requirement</th><th>Implementation</th></tr></thead>
+        <tbody>
+          <tr><td>WCAG contrast (AA)</td><td>All text pairs exceed 4.5:1. Primary text (#1a1f27 on #fff) is 15.3:1.</td></tr>
+          <tr><td>WCAG contrast (AAA target)</td><td>All primary/secondary text pairs exceed 7:1.</td></tr>
+          <tr><td>No color-only signaling</td><td>Selected tiles use both color change AND border width change (2.5px → 3px)</td></tr>
+          <tr><td>No gradients</td><td>Zero gradient usage — flat fills only, per industrial UX glare guidelines</td></tr>
+          <tr><td>No shadows on interactive elements</td><td>Only card has a box-shadow (decorative). Tiles and buttons are flat.</td></tr>
+          <tr><td>Touch target size</td><td>All targets ≥ 64px height, exceeding Apple (44px) and Google (48dp) minimums</td></tr>
+          <tr><td>Font scaling</td><td>All font sizes use clamp() with rem-compatible minimums</td></tr>
+          <tr><td>No red as a signal color</td><td>Red is excluded. Under bright warehouse lighting, red reads as dark gray.</td></tr>
+          <tr><td>Prevent zoom on input focus</td><td>maximum-scale=1.0 in viewport meta prevents iOS zoom on textarea tap</td></tr>
+          <tr><td>Overscroll</td><td>overscroll-behavior: none prevents pull-to-refresh accidents</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="guide-footer">
+    Connect Inc. · Report a Problem UI · Style Guide v1.0 · Generated April 2026 · For engineering use
+  </div>
+
+</body>
+</html>

@@ -227,6 +227,9 @@
                         <button class="btn btn-secondary" style="flex: 1;" onclick="endOutbound('N')">N</button>
                     </div>
                 </div>
+                <div class="form-panel hidden" style="margin-top: 0;" id="outbound-issue-panel">
+                    <button class="btn btn-secondary btn-block" style="background-color: var(--pulse-red); color: white; border-color: var(--pulse-red);" onclick="reportOutboundIssue()">Issue Reported</button>
+                </div>
                 <div class="form-panel hidden" style="margin-top: 0;" id="outbound-confirm-panel">
                     <button class="btn btn-primary btn-block" onclick="confirmOutboundShip()">Ship Confirm</button>
                 </div>
@@ -314,7 +317,7 @@
             <div style="flex-grow: 1; position: relative; overflow: auto; width: 100%; background: var(--light-gray);">
                 <div id="iframe-zoom-container"
                     style="width: 200%; height: 200%; transform-origin: top left; transform: scale(0.5); transition: transform 0.2s, width 0.2s, height 0.2s;">
-                    <iframe src="https://msi-demo.com:7200/urw"
+                    <iframe src="UserReport/report-a-problem.html"
                         style="width: 100%; height: 100%; border: none;"></iframe>
                 </div>
             </div>

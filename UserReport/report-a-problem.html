@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Report a Problem</title>
+
+  <style>
+    /* ── Reset & Base ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:        #1E73BE;
+      --blue-dark:   #155a96;
+      --blue-light:  #deeef9;
+      --blue-border: #8fbfdf;
+      --yellow:      #FCE11B;
+      --yellow-dark: #c9b100;
+      --yellow-text: #3a2e00;
+      --white:       #ffffff;
+      --off-white:   #f4f5f7;
+      --border:      #c8cdd4;
+      --border-dark: #a0a8b2;
+      --text-primary:   #1a1f27;
+      --text-secondary: #4a5260;
+      --text-muted:     #717b8c;
+      --success:     #1a7a3a;
+      --success-bg:  #e6f4ec;
+      --radius-tile: 12px;
+      --radius-btn:  10px;
+      --tile-min-h:  clamp(64px, 14vw, 88px);
+      --font-size-tile:  clamp(17px, 4.5vw, 22px);
+      --font-size-label: clamp(12px, 3vw, 15px);
+      --font-size-note:  clamp(15px, 4vw, 18px);
+      --font-size-btn:   clamp(16px, 4.2vw, 20px);
+      --font-size-title: clamp(22px, 6vw, 32px);
+      --font-size-sub:   clamp(13px, 3.2vw, 16px);
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--off-white);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+      overscroll-behavior: none;
+    }
+
+    body {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      min-height: 100vh;
+      padding: clamp(0px, 2vw, 16px);
+    }
+
+    /* ── Card Shell ───────────────────────────────────────── */
+    .card {
+      width: 100%;
+      max-width: 480px;
+      background: var(--white);
+      border-radius: clamp(0px, 2vw, 18px);
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+      display: flex;
+      flex-direction: column;
+      min-height: 100dvh;
+    }
+
+    @media (min-width: 500px) {
+      body { padding: 24px 16px; align-items: center; }
+      .card { min-height: unset; }
+    }
+
+    /* ── Header ───────────────────────────────────────────── */
+    .header {
+      background: var(--blue);
+      padding: clamp(20px, 5vw, 32px) clamp(16px, 4vw, 28px) clamp(16px, 4vw, 24px);
+      text-align: center;
+    }
+
+    .header h1 {
+      color: var(--white);
+      font-size: var(--font-size-title);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+    }
+
+    .header p {
+      color: rgba(255,255,255,0.82);
+      font-size: var(--font-size-sub);
+      margin-top: 5px;
+      font-weight: 500;
+      letter-spacing: 0.1px;
+    }
+
+    /* ── Body ─────────────────────────────────────────────── */
+    .body {
+      padding: clamp(14px, 3.5vw, 22px);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(12px, 3vw, 18px);
+    }
+
+    /* ── Tile Grid ────────────────────────────────────────── */
+    .tile-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(8px, 2vw, 14px);
+    }
+
+    .tile {
+      min-height: var(--tile-min-h);
+      border: 2.5px solid var(--border);
+      border-radius: var(--radius-tile);
+      background: var(--white);
+      color: var(--text-primary);
+      font-size: var(--font-size-tile);
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 10px 8px;
+      line-height: 1.2;
+      transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease, transform 0.08s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .tile:active { transform: scale(0.96); }
+
+    .tile.selected {
+      border-color: var(--blue);
+      background: var(--blue-light);
+      color: var(--blue-dark);
+      border-width: 3px;
+    }
+
+    /* ── Notes Section ────────────────────────────────────── */
+    .notes-section { display: flex; flex-direction: column; gap: 6px; }
+
+    .notes-label {
+      font-size: var(--font-size-label);
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+    }
+
+    .notes-area {
+      width: 100%;
+      background: var(--yellow);
+      color: var(--yellow-text);
+      border: 2px solid var(--yellow-dark);
+      border-radius: var(--radius-tile);
+      padding: clamp(10px, 2.5vw, 14px) clamp(12px, 3vw, 16px);
+      font-size: var(--font-size-note);
+      font-family: inherit;
+      line-height: 1.5;
+      resize: none;
+      min-height: clamp(80px, 18vw, 110px);
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    .notes-area::placeholder { color: #8a7400; opacity: 1; }
+    .notes-area:focus { border-color: #a08800; box-shadow: 0 0 0 3px rgba(252,225,27,0.4); }
+
+    /* ── Footer Buttons ───────────────────────────────────── */
+    .footer {
+      background: var(--off-white);
+      border-top: 1.5px solid var(--border);
+      padding: clamp(12px, 3vw, 18px) clamp(14px, 3.5vw, 22px);
+      display: flex;
+      gap: clamp(8px, 2vw, 14px);
+    }
+
+    .btn {
+      border: 2px solid var(--border-dark);
+      border-radius: var(--radius-btn);
+      font-family: inherit;
+      font-size: var(--font-size-btn);
+      font-weight: 700;
+      cursor: pointer;
+      padding: clamp(14px, 3.5vw, 18px) 0;
+      line-height: 1;
+      transition: background 0.12s, transform 0.08s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn:active { transform: scale(0.97); }
+
+    .btn-cancel {
+      flex: 1;
+      background: var(--white);
+      color: var(--text-secondary);
+    }
+
+    .btn-cancel:hover { background: #eaecef; }
+
+    .btn-submit {
+      flex: 2;
+      background: var(--blue);
+      color: var(--white);
+      border-color: var(--blue-dark);
+    }
+
+    .btn-submit:hover { background: var(--blue-dark); }
+
+    /* ── Device ID strip ──────────────────────────────────── */
+    .device-strip {
+      background: var(--off-white);
+      border-top: 1px solid var(--border);
+      padding: 7px 16px;
+      text-align: center;
+      font-size: clamp(10px, 2.5vw, 12px);
+      color: var(--text-muted);
+      letter-spacing: 0.3px;
+    }
+
+    /* ── Validation hint ──────────────────────────────────── */
+    .hint {
+      display: none;
+      font-size: clamp(12px, 3vw, 14px);
+      color: #b83030;
+      font-weight: 600;
+      text-align: center;
+      padding: 2px 0 4px;
+    }
+    .hint.visible { display: block; }
+  </style>
+</head>
+
+<body>
+  <div class="card" id="card">
+    <form id="reportForm" name="form1" method="post" action="https://msi-demo.com:2201/userRepSubmit" style="display:contents;">
+      <!-- Hidden fields corresponding to original form structure -->
+      <input type="checkbox" name="cbox1" id="input-cbox1" style="display:none">
+      <input type="checkbox" name="cbox2" id="input-cbox2" style="display:none">
+      <input type="checkbox" name="cbox3" id="input-cbox3" style="display:none">
+      <input type="checkbox" name="cbox4" id="input-cbox4" style="display:none">
+      <input type="checkbox" name="cbox5" id="input-cbox5" style="display:none">
+      <input type="checkbox" name="cbox6" id="input-cbox6" style="display:none">
+
+      <div class="header">
+        <h1>Report a Problem</h1>
+        <p>Tap everything that applies</p>
+      </div>
+
+      <!-- Main form -->
+      <div class="body" id="form-body">
+        <div class="tile-grid" id="tile-grid">
+          <div class="tile" data-value="Slower">Slower</div>
+          <div class="tile" data-value="Error">Error</div>
+          <div class="tile" data-value="Locked Up">Locked Up</div>
+          <div class="tile" data-value="Connection">Connection</div>
+          <div class="tile" data-value="Blank Screen">Blank Screen</div>
+          <div class="tile" data-value="Other">Other</div>
+        </div>
+
+        <p class="hint" id="hint">Please select an issue or add a note.</p>
+
+        <div class="notes-section">
+          <span class="notes-label">Additional Notes</span>
+          <textarea
+            class="notes-area"
+            id="notes"
+            name="description"
+            rows="4"
+            placeholder="Describe what happened…"
+            autocomplete="off"
+            autocorrect="on"
+            spellcheck="true"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="footer" id="footer">
+        <button class="btn btn-cancel" id="btn-cancel" type="button">Cancel</button>
+        <button class="btn btn-submit" id="btn-submit" type="button">Submit</button>
+      </div>
+
+
+      <div class="device-strip" id="device-strip">Device IP: —</div>
+    </form>
+  </div>
+
+  <div id="thank-you-screen" style="display: none; height: 100vh; width: 100%; flex-direction: column; align-items: center; justify-content: center; background: #000000; color: #ffffff; padding: 20px; box-sizing: border-box; text-align: center; position: fixed; top: 0; left: 0; z-index: 1000;">
+    <h1 style="font-size: clamp(32px, 8vw, 48px); font-weight: 500; margin-bottom: 40px; letter-spacing: 0.5px;">Thank You</h1>
+    
+    <div style="margin-bottom: 60px; max-width: 250px; width: 60%;">
+      <img src="https://msi-demo.com:2201/crf_root:/splash/web/CVAplain.jpg" alt="Connect" style="width: 100%; height: auto;">
+    </div>
+    
+    <button class="btn btn-submit" style="width: 100%; max-width: 320px; padding: 18px; font-size: clamp(18px, 5vw, 22px); border: none; font-weight: 500; letter-spacing: 1px; background: #1E73BE; color: white;" onclick="closeApp()">CLOSE</button>
+  </div>
+
+  <script>
+    // Map tile values to hidden checkbox inputs
+    const mapping = {
+      'Slower': 'input-cbox1',
+      'Error': 'input-cbox2',
+      'Locked Up': 'input-cbox3',
+      'Connection': 'input-cbox4',
+      'Blank Screen': 'input-cbox5',
+      'Other': 'input-cbox6'
+    };
+
+    // ── Tile toggle ───────────────────────────────────────
+    document.getElementById('tile-grid').addEventListener('click', function(e) {
+      const tile = e.target.closest('.tile');
+      if (!tile) return;
+      tile.classList.toggle('selected');
+      document.getElementById('hint').classList.remove('visible');
+      
+      const value = tile.dataset.value;
+      if (mapping[value]) {
+        const checkbox = document.getElementById(mapping[value]);
+        if (checkbox) checkbox.checked = tile.classList.contains('selected');
+      }
+    });
+
+    // ── Cancel ────────────────────────────────────────────
+    document.getElementById('btn-cancel').addEventListener('click', function(e) {
+      e.preventDefault();
+      const form = document.getElementById('reportForm');
+      form.action = 'https://msi-demo.com:2201/userRepCancel';
+      form.submit();
+    });
+
+    // ── Submit ────────────────────────────────────────────
+    document.getElementById('btn-submit').addEventListener('click', function(e) {
+      e.preventDefault();
+      const selected = [...document.querySelectorAll('.tile.selected')].map(t => t.dataset.value);
+      const notes = document.getElementById('notes').value.trim();
+
+      if (selected.length === 0 && !notes) {
+        document.getElementById('hint').classList.add('visible');
+        return;
+      }
+
+      const form = document.getElementById('reportForm');
+      form.action = 'https://msi-demo.com:2201/userRepSubmit';
+      
+      // Hide submit button to prevent double submission
+      document.getElementById('btn-submit').style.visibility = 'hidden';
+
+      const formData = new URLSearchParams();
+      // Add checkboxes
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+      checkboxes.forEach(cb => {
+         if(cb.checked) formData.append(cb.name, 'on');
+      });
+      formData.append('description', notes);
+
+      fetch('https://msi-demo.com:2201/userRepSubmit', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }).then(() => {
+         showThankYou();
+      }).catch((e) => {
+         console.error('Error:', e);
+         showThankYou(); // Show thank you even if network fails locally
+      });
+    });
+
+    function showThankYou() {
+        document.getElementById('card').style.display = 'none';
+        document.body.style.background = '#000000';
+        document.getElementById('thank-you-screen').style.display = 'flex';
+    }
+
+    function closeApp() {
+        if (window.parent !== window) {
+            window.parent.postMessage('closeDiagnosticOverlay', '*');
+            setTimeout(() => location.reload(), 200);
+        } else {
+            window.location.href = '../index.html';
+        }
+    }
+
+    // ── Fetch device IP ───────────────────────────────────
+    fetch('https://api.ipify.org?format=json')
+      .then(r => r.json())
+      .then(d => { document.getElementById('device-strip').textContent = 'Device IP: ' + d.ip; })
+      .catch(() => {});
+  </script>
+</body>
+</html>

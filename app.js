@@ -328,7 +328,7 @@ async function endOutbound(choice) {
     document.getElementById('outbound-end-panel').classList.add('hidden');
     
     if (del === '6305551212') {
-        showLoading("Stock on Resource Vialotion - Report Issue #LPN1200");
+        showLoading("Stock on Resource Violation - Please Report Issue #LPN1200");
         await sleep(5000);
         hideLoading();
         document.getElementById('outbound-issue-panel').classList.remove('hidden');

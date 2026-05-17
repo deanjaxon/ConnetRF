@@ -67,11 +67,12 @@
       display: flex;
       flex-direction: column;
       min-height: 100dvh;
+      max-height: 100dvh;
     }
 
     @media (min-width: 500px) {
-      body { padding: 24px 16px; align-items: center; }
-      .card { min-height: unset; }
+      body { padding: 30px 16px; align-items: flex-start; }
+      .card { min-height: unset; max-height: calc(100vh - 60px); margin-bottom: 30px; }
     }
 
     /* ── Header ───────────────────────────────────────────── */
@@ -104,6 +105,8 @@
       display: flex;
       flex-direction: column;
       gap: clamp(12px, 3vw, 18px);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     /* ── Tile Grid ────────────────────────────────────────── */
@@ -173,6 +176,22 @@
     .notes-area::placeholder { color: #8a7400; opacity: 1; }
     .notes-area:focus { border-color: #a08800; box-shadow: 0 0 0 3px rgba(252,225,27,0.4); }
 
+    .text-input {
+      width: 100%;
+      background: var(--white);
+      color: var(--text-primary);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-tile);
+      padding: clamp(10px, 2.5vw, 14px) clamp(12px, 3vw, 16px);
+      font-size: var(--font-size-note);
+      font-family: inherit;
+      outline: none;
+      -webkit-appearance: none;
+      transition: border-color 0.12s ease;
+    }
+    .text-input::placeholder { color: var(--text-muted); }
+    .text-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(30,115,190,0.2); }
+
     /* ── Footer Buttons ───────────────────────────────────── */
     .footer {
       background: var(--off-white);
@@ -240,7 +259,7 @@
 
 <body>
   <div class="card" id="card">
-    <form id="reportForm" name="form1" method="post" action="https://msi-demo.com:2201/userRepSubmit" style="display:contents;">
+    <form id="reportForm" name="form1" method="post" action="https://msi-demo.com:7200/urw" style="display:contents;">
       <!-- Hidden fields corresponding to original form structure -->
       <input type="checkbox" name="cbox1" id="input-cbox1" style="display:none">
       <input type="checkbox" name="cbox2" id="input-cbox2" style="display:none">
@@ -266,6 +285,16 @@
         </div>
 
         <p class="hint" id="hint">Please select an issue or add a note.</p>
+
+        <div class="notes-section">
+          <span class="notes-label">Your Name</span>
+          <input type="text" class="text-input" id="userName" name="userName" placeholder="Enter your name" autocomplete="off" autocorrect="off">
+        </div>
+
+        <div class="notes-section">
+          <span class="notes-label">Your Location</span>
+          <input type="text" class="text-input" id="userLocation" name="userLocation" placeholder="Enter your location" autocomplete="off" autocorrect="off">
+        </div>
 
         <div class="notes-section">
           <span class="notes-label">Additional Notes</span>
@@ -347,7 +376,7 @@
       }
 
       const form = document.getElementById('reportForm');
-      form.action = 'https://msi-demo.com:2201/userRepSubmit';
+      form.action = 'https://msi-demo.com:7200/urw';
       
       // Hide submit button to prevent double submission
       document.getElementById('btn-submit').style.visibility = 'hidden';
@@ -358,9 +387,14 @@
       checkboxes.forEach(cb => {
          if(cb.checked) formData.append(cb.name, 'on');
       });
+      const userName = document.getElementById('userName').value.trim();
+      const userLocation = document.getElementById('userLocation').value.trim();
+      
+      formData.append('userName', userName);
+      formData.append('userLocation', userLocation);
       formData.append('description', notes);
 
-      fetch('https://msi-demo.com:2201/userRepSubmit', {
+      fetch('https://msi-demo.com:7200/urw', {
         method: 'POST',
         body: formData,
         headers: {

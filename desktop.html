@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSI | Desktop Simulation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-grad-1: #0f172a;
+            --bg-grad-2: #1e293b;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #3b82f6;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--bg-grad-1) 0%, var(--bg-grad-2) 100%);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            overflow: hidden;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            animation: fadeIn 1s ease-in-out;
+        }
+        .header h1 {
+            font-size: 2.2rem;
+            margin: 0;
+            font-weight: 700;
+            background: linear-gradient(to right, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+        .header p {
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            font-size: 1.05rem;
+        }
+        .simulator-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.4));
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .device-skin {
+            height: 85vh;
+            max-height: 900px;
+            min-height: 400px;
+            width: auto;
+            position: relative;
+            z-index: 1;
+            pointer-events: none; /* Let clicks pass through the image to the iframe */
+        }
+        .device-screen {
+            position: absolute;
+            /* Exact programmatic bounding box for the white screen inside the skin image */
+            top: 16.0%;
+            left: 13.2%;
+            width: 73.99%;
+            height: 67.0%;
+            border: none;
+            z-index: 2; /* Render on top of the skin image */
+            background-color: #fff;
+            border-radius: 4px; /* Slight rounded corners */
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .controls {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            animation: fadeIn 1.2s ease-in-out;
+        }
+        .btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--text-light);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>MSI Terminal</h1>
+        <p>Interactive Desktop Simulation</p>
+    </div>
+
+    <div class="simulator-wrapper">
+        <img src="tc22_27.png" alt="Zebra TC22/TC27 Skin" class="device-skin">
+        <iframe src="index.html" class="device-screen" title="Mobile Simulation"></iframe>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="document.querySelector('.device-screen').src='index.html'">↻ Restart App</button>
+        <button class="btn" onclick="openCalibration()">⚙️ Calibration Help</button>
+    </div>
+
+    <script>
+        function openCalibration() {
+            if (document.getElementById('cal-panel')) return;
+            const panel = document.createElement('div');
+            panel.id = 'cal-panel';
+            panel.style = "position:fixed; bottom:20px; right:20px; background:rgba(30,41,59,0.95); padding:20px; border-radius:12px; z-index:9999; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 25px rgba(0,0,0,0.5); backdrop-filter: blur(10px); width: 300px;";
+            
+            panel.innerHTML = `
+                <h3 style="margin-top:0; font-size:1.1rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px;">Calibrate Alignment</h3>
+                
+                <div style="margin-bottom: 10px; display:flex; justify-content:space-between; align-items:center;">
+                    <label style="font-size:0.9rem">Top:</label>
+                    <input type="range" min="5" max="35" step="0.1" value="16.0" id="c-top" oninput="updateCal()" style="width:150px">
+                    <span id="v-top" style="font-size:0.8rem; width:45px; text-align:right">16.0%</span>
+                </div>
+                
+                <div style="margin-bottom: 10px; display:flex; justify-content:space-between; align-items:center;">
+                    <label style="font-size:0.9rem">Left:</label>
+                    <input type="range" min="2" max="25" step="0.1" value="13.2" id="c-left" oninput="updateCal()" style="width:150px">
+                    <span id="v-left" style="font-size:0.8rem; width:45px; text-align:right">13.2%</span>
+                </div>
+                
+                <div style="margin-bottom: 10px; display:flex; justify-content:space-between; align-items:center;">
+                    <label style="font-size:0.9rem">Width:</label>
+                    <input type="range" min="60" max="95" step="0.01" value="73.99" id="c-width" oninput="updateCal()" style="width:150px">
+                    <span id="v-width" style="font-size:0.8rem; width:45px; text-align:right">73.99%</span>
+                </div>
+                
+                <div style="margin-bottom: 10px; display:flex; justify-content:space-between; align-items:center;">
+                    <label style="font-size:0.9rem">Height:</label>
+                    <input type="range" min="50" max="90" step="0.1" value="67.0" id="c-height" oninput="updateCal()" style="width:150px">
+                    <span id="v-height" style="font-size:0.8rem; width:45px; text-align:right">67.0%</span>
+                </div>
+                
+                <div style="margin-bottom: 15px; display:flex; justify-content:space-between; align-items:center;">
+                    <label style="font-size:0.9rem">Radius:</label>
+                    <input type="range" min="0" max="40" step="1" value="4" id="c-radius" oninput="updateCal()" style="width:150px">
+                    <span id="v-radius" style="font-size:0.8rem; width:45px; text-align:right">4px</span>
+                </div>
+                
+                <div style="display:flex; gap:10px;">
+                    <button class="btn" style="flex:1; padding:0.4rem; font-size:0.8rem;" onclick="prompt('Copy these values to update desktop.html CSS:', 'top: ' + document.getElementById('c-top').value + '%; left: ' + document.getElementById('c-left').value + '%; width: ' + document.getElementById('c-width').value + '%; height: ' + document.getElementById('c-height').value + '%; border-radius: ' + document.getElementById('c-radius').value + 'px;')">Save CSS</button>
+                    <button class="btn" style="flex:1; padding:0.4rem; font-size:0.8rem; background:rgba(239,68,68,0.2);" onclick="this.parentElement.parentElement.remove()">Close</button>
+                </div>
+            `;
+            document.body.appendChild(panel);
+        }
+        function updateCal() {
+            const t = document.getElementById('c-top').value;
+            const l = document.getElementById('c-left').value;
+            const w = document.getElementById('c-width').value;
+            const h = document.getElementById('c-height').value;
+            const r = document.getElementById('c-radius').value;
+            
+            document.getElementById('v-top').innerText = Number(t).toFixed(1) + '%';
+            document.getElementById('v-left').innerText = Number(l).toFixed(1) + '%';
+            document.getElementById('v-width').innerText = Number(w).toFixed(1) + '%';
+            document.getElementById('v-height').innerText = Number(h).toFixed(1) + '%';
+            document.getElementById('v-radius').innerText = r + 'px';
+            
+            const screen = document.querySelector('.device-screen');
+            screen.style.top = t + '%';
+            screen.style.left = l + '%';
+            screen.style.width = w + '%';
+            screen.style.height = h + '%';
+            screen.style.borderRadius = r + 'px';
+        }
+    </script>
+
+</body>
+</html>

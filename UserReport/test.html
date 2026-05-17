@@ -1,0 +1,163 @@
+<script language='javascript'>
+/* do not change below - managed by cgi-hop and spx */
+var ipAddr='';
+var CBOX1='Slower';
+var CBOX2='Error';
+var CBOX3='Locked Up';
+var CBOX4='Connection';
+var CBOX5='Blank Screen';
+var CBOX6='Other';
+/* do not change above */
+function goSubmit(){ 
+document.getElementById('subBtn').style.visibility = 'hidden'; form1.submit(); 
+}
+function goCancel(){ form1.action='/userRepCancel'; form1.submit();}
+function init(){
+	if(ipAddr.length > 0){
+		var obj=document.getElementById('ips')
+		if(obj){
+			obj.innerHTML = 'IP:&nbsp;' + ipAddr;
+			obj.style.visibility = 'visible';
+		}
+	}
+	/*
+	var objOld = document.getElementById('cbox1');
+	var objNew = objOld.cloneNode(true);
+	objNew.innerHTML = 'test 1';
+	objOld.parentNode.replaceChild(objNew,objOld);
+	*/
+
+	document.getElementById('cbox1t').innerHTML = CBOX1;
+	document.getElementById('cbox2t').innerHTML = CBOX2;
+	document.getElementById('cbox3t').innerHTML = CBOX3;
+	document.getElementById('cbox4t').innerHTML = CBOX4;
+	document.getElementById('cbox5t').innerHTML = CBOX5;
+	document.getElementById('cbox6t').innerHTML = CBOX6;
+	if(document.body.style.zoom != null){
+		var siz = getSizes();
+		if(siz.winWide > siz.winHigh)
+			document.body.style.zoom = siz.winWide / 400.0;
+		else
+			document.body.style.zoom = siz.winHigh / 300.0;
+	}
+	SFtb();
+}
+function getSizes(){
+	var sWide = screen.width;
+	var sHigh = screen.height;
+	var wWide, wHigh;
+	if(document.body && document.body.offsetWidth){
+		wWide = document.body.offsetWidth;
+		wHigh = document.body.offsetHeight;
+	}
+	if((document.compatMode == 'CSS1Compat') && document.documentElement && 
+	 document.documentElement.offsetWidth){
+		wWide = document.documentElement.offsetWidth;
+		wHigh = document.documentElement.offsetHeight;
+	}
+	if(window.innerWidth && window.innerHeight){
+		wWide = window.innerWidth;
+		wHigh = window.innerHeight;
+	}
+	if(!wWide || (wWide == 'undefined'))
+		wWide = sWide;
+	if(!wHigh || (wHigh == 'undefined'))
+		wHigh = sHigh;
+	return { winWide:wWide,winHigh:wHigh,scrnWide:sWide,scrnHigh:sHigh };
+}
+function SFtb(){
+	// document.getElementById('username').focus();
+}
+function SFtbLoc(){
+	// document.getElementById('location').focus();
+}
+function SFtbDes(){
+	document.getElementById('description').focus();
+}
+</script>
+
+<html>
+<head>
+<title>User Report</title>
+    <style type="text/css">
+      .CtrBody { 
+      	font-family:Arial,Helvetica,sans-serif;font-style:normal; color:#204ba2;font-weight:normal;
+			text-decoration:none;
+			background-color:#fefefe; 
+		   width:100%; height:100%; margin: 0px; padding: 0px; border-width: 0px; 
+		}
+      .CtrScreen { width:100%; height:100%; padding:0px; margin:0px; border:0px; }
+		.CtrArea { 
+			background-color:#ebeff2; 
+			padding:0px; margin:0px; 
+			border:1px solid #777777; 
+		}
+		.tbHdrLarge { 
+			background-color:#3871b8; color:#fefefe; font-size:18px; font-weight:bold; text-align:center;
+			padding: 4px 0px 4px 0px;
+			margin:0px; border:0px;
+		}
+		.tbHdrSmall{ 
+			font-size:18px; font-weight:normal; text-align:center;
+			padding: 2px 0px 2px 0px;
+			margin:0px, border:0px;
+		}
+		.chkBox { 
+			font-size:14px; font-weight:normal; text-align:left; margin:2px; padding:4px 0px 4px 4px; border:0px;
+			background-color:#fefefe;
+		}
+		input[type=checkbox]{ transform: scale(1.5); padding-right:10px; }
+		.textBox {
+			padding:4px 6px 4px 6px;
+			margin:0px; border:0px;
+		}
+		.Btn { background-color:#3871b8; margin:8px; padding:8px; border:0px; }
+		.textIn { font-size:10px; padding:2px; border:0px; }
+    </style>
+</head>
+<body onload='init();' class="CtrBody" >
+<form name='form1' method='post' action='/userRepSubmit' >
+	<table class="CtrScreen" cellspacing="0" cellpadding="0" border="0">
+	<tr><td align='center'>
+		<table class='CtrArea' cellspacing="0" cellpadding="0" border="0">
+		<tr><td>
+			<table cellspacing="0" cellpadding="0" border="0">
+			<!-- centered display below -->
+
+			<tr><td align='center' colspan='2' class='tbHdrLarge'>User Report</td></tr>
+			<tr><td id='ips' name='ips' align='center' colspan='2' class='tbHdrSmall' style='visibility:hidden;'></td></tr>
+
+			<tr><td align='center' colspan='2' class='tbHdrSmall'>Check all that apply</td></tr>
+
+			<tr>
+			<td class='chkBox'><input type='checkbox' name='cbox1' onchange='SFtb();'><span id='cbox1t');\">Check 1<span></td>
+			<td class='chkBox'><input type='checkbox' name='cbox2' onchange='SFtb();'><span id='cbox2t'>Check 2</span></td>
+			</tr>
+			<tr>
+			<td class='chkBox'><input type='checkbox' name='cbox3' onchange='SFtb();'><span id='cbox3t'>Check 3</span></td>
+			<td class='chkBox'><input type='checkbox' name='cbox4' onchange='SFtb();'><span id='cbox4t'>Check 4</span></td>
+			</tr>
+			<tr>
+			<td class='chkBox'><input type='checkbox' name='cbox5' onchange='SFtb();'><span id='cbox5t'>Check 5</span></td>
+			<td class='chkBox'><input type='checkbox' name='cbox6' onchange='SFtb();'><span id='cbox6t'>Check 6</span></td>
+			</tr>
+			<tr>
+			<td colspan='2' style='text-align:center;font-size:8px;font-style:italic;'>Additional Information:</td>
+			</tr>
+			<tr>
+			<td align='center' colspan='2'><textarea class='textBox' name='description' id='description' rows='2' cols='30' wrap='on' style='background:#f8ed5b;'></textarea>
+			</tr>
+
+			<tr>
+			<td class='Btn' align='left'><input type='button' value='Cancel' onclick='goCancel();'></td> 
+			<td class='Btn' align='right'><input type='button' id='subBtn' value='Submit' onclick='goSubmit();'></td>
+			</tr>
+
+			<!-- centered display above -->
+			</table>
+		</td></tr></table>
+	</td></tr>
+	</table>
+</form>
+</body>
+</html>
